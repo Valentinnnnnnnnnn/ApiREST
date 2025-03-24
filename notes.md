@@ -61,3 +61,8 @@ npx tsc // Compiler le projet
 > Usage : Communication interne, microservices, services en temps réel
 
 
+## MVC
+- **Model** : Gestion des données
+- **View** : Présentationn des données
+- **Controller** : Logique de l'application, gestion des requêtes et réponses
+
