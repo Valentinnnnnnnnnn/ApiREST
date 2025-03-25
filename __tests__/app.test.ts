@@ -1,5 +1,5 @@
 import request from 'supertest'
-import { app } from '../src/config/app'
+import { app } from '../src/app'
 import { test, describe, expect } from '@jest/globals'
 
 describe('Test du point d\'entrée', () => {
