@@ -1,23 +1,55 @@
-export enum ErrorType {
-    BadRequest = 400, // Requête invalide
-    Unauthorized = 401, // Non authentifié
-    Forbidden = 403, // Accès refusé
-    NotFound = 404, // Ressource non trouvée
-    MethodNotAllowed = 405, // Méthode HTTP non autorisée
-    Conflict = 409, // Conflit
-    UnprocessableEntity = 422, // Données invalides
-    InternalServerError = 500, // Erreur interne du serveur
-}
-  
-export class CustomError extends Error {
-    public status: number
-    public errorName: string
-  
-    constructor(message: string, status: ErrorType) {
-      const errorName = ErrorType[status] || 'Unknown Error'
-      super(message)
-      this.status = status
-      this.errorName = errorName
-      Object.setPrototypeOf(this, CustomError.prototype)
-    }
+export class AppError extends Error {
+  public readonly statusCode: number
+  public readonly code: string
+
+  constructor(message: string, statusCode: number, code: string) {
+    super(message)
+    this.statusCode = statusCode
+    this.code = code
+
+    Error.captureStackTrace(this, this.constructor)
+    Object.setPrototypeOf(this, AppError.prototype)
   }
+}
+
+export class BadRequestError extends AppError {
+  constructor(message = 'Bad request') {
+    super(message, 400, 'BAD_REQUEST')
+  }
+}
+
+export class ValidationError extends AppError {
+  constructor(message = 'Validation failed') {
+    super(message, 400, 'VALIDATION_ERROR')
+  }
+}
+
+export class AuthenticationError extends AppError {
+  constructor(message = 'Authentication failed') {
+    super(message, 401, 'AUTHENTICATION_ERROR')
+  }
+}
+
+export class ForbiddenError extends AppError {
+  constructor(message = 'Access denied') {
+    super(message, 403, 'FORBIDDEN')
+  }
+}
+
+export class NotFoundError extends AppError {
+  constructor(message = 'Resource not found') {
+    super(message, 404, 'NOT_FOUND')
+  }
+}
+
+export class ConflictError extends AppError {
+  constructor(message = 'Resource conflict') {
+    super(message, 409, 'CONFLICT')
+  }
+}
+
+export class InternalServerError extends AppError {
+  constructor(message = 'Internal server error') {
+    super(message, 500, 'INTERNAL_SERVER_ERROR')
+  }
+}

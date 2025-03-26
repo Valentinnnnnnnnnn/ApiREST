@@ -8,15 +8,17 @@ const PORT = process.env.PORT || 3000
 
 // Try to connect to the database
 try {
-    connectDatabase()
+  connectDatabase()
 } catch (error) {
-    console.error("Error connecting to database:", error)
-    process.exit(1)
+  console.error('Error connecting to database:', error)
+  process.exit(1)
 }
 
 // Start the server
-app.listen(PORT, () => {
+app
+  .listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)
-}).on('error', (err) => {
+  })
+  .on('error', (err) => {
     throw new Error(err.message)
-})
+  })

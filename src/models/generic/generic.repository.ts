@@ -1,16 +1,17 @@
 import { Model, Document } from 'mongoose'
 import { IRepository } from './generic.model'
-import { CustomError, ErrorType } from '../errors/error.model'
+import { ValidationError } from '../errors/error.model'
 
-export abstract class MongooseRepository<T extends Document> implements IRepository<T> {
+export abstract class MongooseRepository<T extends Document>
+  implements IRepository<T>
+{
   protected constructor(protected readonly model: Model<T>) {}
 
   public async create(item: Partial<T>): Promise<T> {
     try {
-        console.log('item', item)
-        return await this.model.create(item)
+      return await this.model.create(item)
     } catch (error) {
-        throw new CustomError('Failed to create item', ErrorType.InternalServerError)
+      throw new ValidationError('Invalid item format')
     }
   }
 
@@ -19,7 +20,7 @@ export abstract class MongooseRepository<T extends Document> implements IReposit
       const result = await this.model.findById(String(id)).exec()
       return result
     } catch (error) {
-      throw new CustomError('Invalid ID format', ErrorType.BadRequest)
+      throw new ValidationError('Invalid ID format')
     }
   }
 
@@ -27,19 +28,21 @@ export abstract class MongooseRepository<T extends Document> implements IReposit
     try {
       return await this.model.find().exec()
     } catch (error) {
-      throw new CustomError('Failed to retrieve items', ErrorType.InternalServerError)
+      throw new ValidationError('Invalid ID format')
     }
   }
 
   public async update(id: number, item: Partial<T>): Promise<T | null> {
     try {
-      const result = await this.model.findByIdAndUpdate(id, item, { new: true }).exec()
+      const result = await this.model
+        .findByIdAndUpdate(id, item, { new: true })
+        .exec()
       if (!result) {
-        throw new CustomError('Item not found for update', ErrorType.NotFound)
+        throw new ValidationError('Invalid ID format')
       }
       return result
     } catch (error) {
-      throw new CustomError('Invalid update request', ErrorType.BadRequest)
+      throw new ValidationError('Invalid ID format')
     }
   }
 
@@ -47,11 +50,11 @@ export abstract class MongooseRepository<T extends Document> implements IReposit
     try {
       const result = await this.model.findByIdAndDelete(String(id)).exec()
       if (!result) {
-        throw new CustomError('Item not found for deletion', ErrorType.NotFound)
+        throw new ValidationError('Invalid ID format')
       }
       return true
     } catch (error) {
-      throw new CustomError('Invalid delete request', ErrorType.BadRequest)
+      throw new ValidationError('Invalid ID format')
     }
   }
 }
