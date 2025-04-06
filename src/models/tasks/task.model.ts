@@ -1,4 +1,5 @@
 import { Schema } from 'mongoose'
+import { z } from 'zod'
 
 export enum Priority {
   Low = 'low',
@@ -22,12 +23,12 @@ export interface TaskFilters {
   priority?: string[]
 }
 
-export type CreateTaskDto = {
-  title: string
-  description?: string
-  dueDate?: Date
-  priority: Priority
-}
+export const CreateTaskDto = z.object({
+  title: z.string().min(1).max(100),
+  description: z.string().min(1).max(1000).optional(),
+  dueDate: z.coerce.date().optional(),
+  priority: z.enum([Priority.Low, Priority.Medium, Priority.High])
+})
 
 export type UpdateTodoDto = {
   title?: string

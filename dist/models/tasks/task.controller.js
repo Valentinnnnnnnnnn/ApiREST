@@ -54,25 +54,19 @@ TaskController.getTask = (0, asyncHandler_1.asyncHandler)((req, res) => __awaite
     const task = yield new task_service_1.TaskService().getTask(id);
     // Vérifie si la tâche existe
     if (!task) {
-        throw new errors_1.BadRequestError('Tâche introuvable');
+        throw new errors_1.NotFoundError('Tâche introuvable');
     }
     res.status(200).json(task);
 }));
 TaskController.createTask = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // Check if the body is correctly formatted in JSON
-    if (!req.body || typeof req.body !== 'object') {
-        throw new errors_1.BadRequestError('Invalid JSON format');
+    const parsed = task_model_1.CreateTaskDto.safeParse(req.body);
+    if (!parsed.success) {
+        const message = parsed.error.errors
+            .map((error) => `${error.path.join('.')}: ${error.message}`)
+            .join(', ');
+        throw new errors_1.ValidationError(message);
     }
-    const createTaskDto = req.body;
-    // Check if title is provided and is a string
-    if (!createTaskDto.title || typeof createTaskDto.title !== 'string') {
-        throw new errors_1.BadRequestError('"title" is required and must be a string');
-    }
-    // Check if priority is provided and is a valid enum value
-    if (createTaskDto.priority &&
-        !Object.values(task_model_1.Priority).includes(createTaskDto.priority)) {
-        throw new errors_1.BadRequestError('"Priority" is invalid');
-    }
+    req.body = parsed.data;
     const task = yield new task_service_1.TaskService().createTask(req.body);
     res.status(201).json(task);
 }));
