@@ -20,8 +20,7 @@ export class TaskRepository extends MongooseRepository<Task & Document> {
   public async findByStatusAndPriorities(
     status: boolean,
     priorities: string[]
-  ): 
-  // Filtre par status et par priorité
+  ): // Filtre par status et par priorité
   Promise<Task[]> {
     return this.model
       .find({ completed: status, priority: { $in: priorities } })

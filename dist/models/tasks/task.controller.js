@@ -22,6 +22,7 @@ _a = TaskController;
 TaskController.getAllTasks = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const query = req.query;
     const filters = {};
+    // Check if the query parameters are valid
     if (query.status) {
         const statusQuery = query.status.toString().toLowerCase();
         if (statusQuery !== 'true' && statusQuery !== 'false') {
@@ -44,7 +45,16 @@ TaskController.getAllTasks = (0, asyncHandler_1.asyncHandler)((req, res) => __aw
     res.status(200).json(tasks);
 }));
 TaskController.getTask = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const task = yield new task_service_1.TaskService().getTask(req.params.id);
+    const { id } = req.params;
+    // Vérifie si l'id correspond aux attentes d'un ObjectId MongoDB
+    const objectIdRegex = /^[a-fA-F0-9]{24}$/;
+    if (!objectIdRegex.test(id)) {
+        throw new errors_1.BadRequestError('L\'identifiant de la tâche est invalide');
+    }
+    const task = yield new task_service_1.TaskService().getTask(id);
+    if (!task) {
+        throw new errors_1.BadRequestError('Tâche introuvable');
+    }
     res.status(200).json(task);
 }));
 TaskController.createTask = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {

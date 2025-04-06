@@ -19,11 +19,13 @@ class TaskRepository extends generic_repository_1.MongooseRepository {
     }
     findByStatus(status) {
         return __awaiter(this, void 0, void 0, function* () {
+            // Filtre par status
             return this.model.find({ completed: status }).exec();
         });
     }
     findByPriorities(priorities) {
         return __awaiter(this, void 0, void 0, function* () {
+            // Filtre par priorité
             return this.model.find({ priority: { $in: priorities } }).exec();
         });
     }

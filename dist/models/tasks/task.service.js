@@ -62,7 +62,6 @@ class TaskService {
     }
     toggleTaskComplete(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log('toggleTaskComplete', id);
             const task = yield this.taskRepository.getById(id);
             if (!task) {
                 throw new Error('Task not found');

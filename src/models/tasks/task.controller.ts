@@ -7,7 +7,7 @@ export class TaskController {
   public static getAllTasks = asyncHandler(async (req, res) => {
     const query = req.query
     const filters: TaskFilters = {} as TaskFilters
-    
+
     // Check if the query parameters are valid
     if (query.status) {
       const statusQuery = query.status.toString().toLowerCase()
@@ -34,7 +34,17 @@ export class TaskController {
   })
 
   public static getTask = asyncHandler(async (req, res) => {
-    const task = await new TaskService().getTask(req.params.id);
+    const { id } = req.params
+    // Vérifie si l'id correspond aux attentes d'un ObjectId MongoDB
+    const objectIdRegex = /^[a-fA-F0-9]{24}$/
+    if (!objectIdRegex.test(id)) {
+      throw new BadRequestError("L'identifiant de la tâche est invalide")
+    }
+    const task = await new TaskService().getTask(id)
+    // Vérifie si la tâche existe
+    if (!task) {
+      throw new BadRequestError('Tâche introuvable')
+    }
     res.status(200).json(task)
   })
 
