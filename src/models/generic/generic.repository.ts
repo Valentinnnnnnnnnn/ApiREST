@@ -1,6 +1,10 @@
 import { Model, Document } from 'mongoose'
 import { IRepository } from './generic.model'
-import { ValidationError } from '../../shared/utils/errors'
+import {
+  ValidationError,
+  NotFoundError,
+  BadRequestError
+} from '../../shared/utils/errors'
 
 export abstract class MongooseRepository<T extends Document>
   implements IRepository<T>
@@ -37,12 +41,16 @@ export abstract class MongooseRepository<T extends Document>
       const result = await this.model
         .findByIdAndUpdate(id, item, { new: true })
         .exec()
-      if (!result) {
-        throw new ValidationError('Invalid ID format')
+      if (result === null) {
+        throw new NotFoundError('Item not found')
       }
       return result
-    } catch (error) {
-      throw new ValidationError('Invalid ID format')
+    } catch (error: any) {
+      console.error('Error updating item:', error)
+      if (error.code === 'NOT_FOUND') {
+        throw error
+      }
+      throw new BadRequestError('Invalid request')
     }
   }
 

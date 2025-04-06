@@ -1,6 +1,5 @@
 import { TaskRepository } from './task.repository'
 import { Task, TaskFilters } from './task.model'
-import { ValidationError } from '../../shared/utils/errors'
 
 export class TaskService {
   private taskRepository: TaskRepository
@@ -36,11 +35,8 @@ export class TaskService {
     return this.taskRepository.create(task)
   }
 
-  public async updateTask(task: Task) {
-    if (!task.id || typeof task.id !== 'string') {
-      throw new ValidationError('Invalid ID formattt')
-    }
-    return this.taskRepository.update(task.id, task)
+  public async updateTask(id: string, task: Task) {
+    return this.taskRepository.update(id, task)
   }
 
   public async deleteTask(id: string) {

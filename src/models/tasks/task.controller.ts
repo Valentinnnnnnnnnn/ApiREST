@@ -5,9 +5,22 @@ import {
   ValidationError,
   NotFoundError
 } from '../../shared/utils/errors'
-import { TaskFilters, Priority, CreateTaskDto } from './task.model'
+import {
+  TaskFilters,
+  Priority,
+  CreateTaskDto,
+  UpdateTaskDto,
+  IdModel
+} from './task.model'
 
 export class TaskController {
+  private static checkIdFormat(id: string) {
+    // Vérifie si l'id correspond aux attentes d'un ObjectId MongoDB
+    if (!IdModel.safeParse(id).success) {
+      throw new BadRequestError('Invalid ID format')
+    }
+  }
+
   public static getAllTasks = asyncHandler(async (req, res) => {
     const query = req.query
     const filters: TaskFilters = {} as TaskFilters
@@ -39,15 +52,12 @@ export class TaskController {
 
   public static getTask = asyncHandler(async (req, res) => {
     const { id } = req.params
-    // Vérifie si l'id correspond aux attentes d'un ObjectId MongoDB
-    const objectIdRegex = /^[a-fA-F0-9]{24}$/
-    if (!objectIdRegex.test(id)) {
-      throw new BadRequestError("L'identifiant de la tâche est invalide")
-    }
+    this.checkIdFormat(id)
+
     const task = await new TaskService().getTask(id)
     // Vérifie si la tâche existe
     if (!task) {
-      throw new NotFoundError('Tâche introuvable')
+      throw new NotFoundError('Task not found')
     }
     res.status(200).json(task)
   })
@@ -66,8 +76,21 @@ export class TaskController {
   })
 
   public static updateTask = asyncHandler(async (req, res) => {
-    const task = await new TaskService().updateTask(req.body)
-    res.status(200).json(task)
+    const { id } = req.params
+    this.checkIdFormat(id)
+
+    const parsed = UpdateTaskDto.safeParse(req.body)
+    if (!parsed.success) {
+      const message = parsed.error.errors
+        .map((error) => `${error.path.join('.')}: ${error.message}`)
+        .join(', ')
+      throw new ValidationError(message)
+    }
+    req.body = parsed.data
+    req.body.updatedAt = new Date() // Set the updatedAt field to the current date
+
+    const task = await new TaskService().updateTask(id, req.body)
+    res.status(201).json(task)
   })
 
   public static deleteTask = asyncHandler(async (req, res) => {

@@ -23,6 +23,12 @@ export interface TaskFilters {
   priority?: string[]
 }
 
+export const IdModel = z
+  .string()
+  .refine((val) => /^[0-9a-fA-F]{24}$/.test(val), {
+    message: 'Invalid ID format'
+  })
+
 export const CreateTaskDto = z.object({
   title: z.string().min(1).max(100),
   description: z.string().min(1).max(1000).optional(),
@@ -30,13 +36,12 @@ export const CreateTaskDto = z.object({
   priority: z.enum([Priority.Low, Priority.Medium, Priority.High])
 })
 
-export type UpdateTodoDto = {
-  title?: string
-  description?: string
-  completed?: boolean
-  dueDate?: Date
-  priority?: Priority
-}
+export const UpdateTaskDto = z.object({
+  title: z.string().min(1).max(100),
+  description: z.string().min(1).max(1000).optional(),
+  dueDate: z.coerce.date().optional(),
+  priority: z.nativeEnum(Priority).optional()
+})
 
 export const taskSchema = new Schema<Task>({
   title: { type: String, required: true },

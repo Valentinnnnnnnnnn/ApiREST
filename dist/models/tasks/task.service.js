@@ -11,7 +11,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TaskService = void 0;
 const task_repository_1 = require("./task.repository");
-const errors_1 = require("../../shared/utils/errors");
 class TaskService {
     constructor() {
         this.taskRepository = new task_repository_1.TaskRepository();
@@ -46,12 +45,9 @@ class TaskService {
             return this.taskRepository.create(task);
         });
     }
-    updateTask(task) {
+    updateTask(id, task) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (!task.id || typeof task.id !== 'string') {
-                throw new errors_1.ValidationError('Invalid ID formattt');
-            }
-            return this.taskRepository.update(task.id, task);
+            return this.taskRepository.update(id, task);
         });
     }
     deleteTask(id) {

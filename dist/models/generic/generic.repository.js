@@ -52,13 +52,17 @@ class MongooseRepository {
                 const result = yield this.model
                     .findByIdAndUpdate(id, item, { new: true })
                     .exec();
-                if (!result) {
-                    throw new errors_1.ValidationError('Invalid ID format');
+                if (result === null) {
+                    throw new errors_1.NotFoundError('Item not found');
                 }
                 return result;
             }
             catch (error) {
-                throw new errors_1.ValidationError('Invalid ID format');
+                console.error('Error updating item:', error);
+                if (error.code === 'NOT_FOUND') {
+                    throw error;
+                }
+                throw new errors_1.BadRequestError('Invalid request');
             }
         });
     }
