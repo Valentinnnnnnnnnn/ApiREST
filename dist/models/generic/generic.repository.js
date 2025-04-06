@@ -71,12 +71,15 @@ class MongooseRepository {
             try {
                 const result = yield this.model.findByIdAndDelete(String(id)).exec();
                 if (!result) {
-                    throw new errors_1.ValidationError('Invalid ID format');
+                    throw new errors_1.NotFoundError('Item not found');
                 }
                 return true;
             }
             catch (error) {
-                throw new errors_1.ValidationError('Invalid ID format');
+                if (error.code === 'NOT_FOUND') {
+                    throw error;
+                }
+                throw new errors_1.ValidationError('Invalid request');
             }
         });
     }

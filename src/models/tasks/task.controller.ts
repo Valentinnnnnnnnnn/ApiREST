@@ -94,7 +94,10 @@ export class TaskController {
   })
 
   public static deleteTask = asyncHandler(async (req, res) => {
-    const task = await new TaskService().deleteTask(req.body)
+    const { id } = req.params
+    this.checkIdFormat(id)
+
+    const task = await new TaskService().deleteTask(id)
     res.status(200).json(task)
   })
 

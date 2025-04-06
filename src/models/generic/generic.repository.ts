@@ -58,11 +58,14 @@ export abstract class MongooseRepository<T extends Document>
     try {
       const result = await this.model.findByIdAndDelete(String(id)).exec()
       if (!result) {
-        throw new ValidationError('Invalid ID format')
+        throw new NotFoundError('Item not found')
       }
       return true
-    } catch (error) {
-      throw new ValidationError('Invalid ID format')
+    } catch (error: any) {
+      if (error.code === 'NOT_FOUND') {
+        throw error
+      }
+      throw new ValidationError('Invalid request')
     }
   }
 }
