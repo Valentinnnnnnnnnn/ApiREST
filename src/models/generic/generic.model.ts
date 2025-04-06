@@ -1,7 +1,7 @@
-export interface IRepository<T, ID = number> {
+export interface IRepository<T, ID = string> {
   create(item: T): Promise<T>
-  getById(id: ID): Promise<T | null>
+  getById(_id: ID): Promise<T | null>
   getAll(): Promise<T[]>
-  update(id: ID, item: Partial<T>): Promise<T | null>
-  delete(id: ID): Promise<boolean>
+  update(_id: ID, item: Partial<T>): Promise<T | null>
+  delete(_id: ID): Promise<boolean>
 }

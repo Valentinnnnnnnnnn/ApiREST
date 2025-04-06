@@ -15,7 +15,7 @@ export abstract class MongooseRepository<T extends Document>
     }
   }
 
-  public async getById(id: number): Promise<T | null> {
+  public async getById(id: string): Promise<T | null> {
     try {
       const result = await this.model.findById(String(id)).exec()
       return result
@@ -32,7 +32,7 @@ export abstract class MongooseRepository<T extends Document>
     }
   }
 
-  public async update(id: number, item: Partial<T>): Promise<T | null> {
+  public async update(id: string, item: Partial<T>): Promise<T | null> {
     try {
       const result = await this.model
         .findByIdAndUpdate(id, item, { new: true })
@@ -46,7 +46,7 @@ export abstract class MongooseRepository<T extends Document>
     }
   }
 
-  public async delete(id: number): Promise<boolean> {
+  public async delete(id: string): Promise<boolean> {
     try {
       const result = await this.model.findByIdAndDelete(String(id)).exec()
       if (!result) {

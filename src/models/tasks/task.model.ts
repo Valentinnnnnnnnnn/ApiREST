@@ -1,9 +1,9 @@
 import { Schema } from 'mongoose'
 
-enum Priority {
-  Low = 'Low',
-  Medium = 'Medium',
-  High = 'High'
+export enum Priority {
+  Low = 'low',
+  Medium = 'medium',
+  High = 'high'
 }
 
 export interface Task {
@@ -15,6 +15,11 @@ export interface Task {
   priority: Priority
   createdAt: Date
   updatedAt: Date
+}
+
+export interface TaskFilters {
+  status?: boolean
+  priority?: string[]
 }
 
 export type CreateTaskDto = {
