@@ -10,16 +10,17 @@ export const errorHandlerMiddleware = (
   if (err instanceof AppError) {
     res.status(err.statusCode).json({
       status: 'error',
+      code: err.code,
       message: err.message
     })
-    return
-  }
-
-  // Manage unexpected errors
+  } else (
+    // Manage unexpected errors
   res.status(500).json({
     status: 'error',
     message:
       'An unexpected error occurred, please try again later or contact your system administrator'
   })
-  return
+  )
+
+  next() // For potental future logging
 }

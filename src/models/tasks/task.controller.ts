@@ -15,7 +15,7 @@ import {
 
 export class TaskController {
   private static checkIdFormat(id: string) {
-    // Vérifie si l'id correspond aux attentes d'un ObjectId MongoDB
+    // Verify the ID format using the IdModel schema
     if (!IdModel.safeParse(id).success) {
       throw new BadRequestError('Invalid ID format')
     }
@@ -55,7 +55,7 @@ export class TaskController {
     this.checkIdFormat(id)
 
     const task = await new TaskService().getTask(id)
-    // Vérifie si la tâche existe
+    // Verify if the task exists
     if (!task) {
       throw new NotFoundError('Task not found')
     }

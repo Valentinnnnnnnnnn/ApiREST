@@ -16,7 +16,6 @@ exports.connectDatabase = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-// TODO : use error models
 // Check if MONGODB_URI environment variable is defined
 const mongoURI = process.env.MONGODB_URI;
 if (!mongoURI) {

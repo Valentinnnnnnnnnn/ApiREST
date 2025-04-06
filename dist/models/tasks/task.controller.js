@@ -17,7 +17,7 @@ const errors_1 = require("../../shared/utils/errors");
 const task_model_1 = require("./task.model");
 class TaskController {
     static checkIdFormat(id) {
-        // Vérifie si l'id correspond aux attentes d'un ObjectId MongoDB
+        // Verify the ID format using the IdModel schema
         if (!task_model_1.IdModel.safeParse(id).success) {
             throw new errors_1.BadRequestError('Invalid ID format');
         }
@@ -54,7 +54,7 @@ TaskController.getTask = (0, asyncHandler_1.asyncHandler)((req, res) => __awaite
     const { id } = req.params;
     _a.checkIdFormat(id);
     const task = yield new task_service_1.TaskService().getTask(id);
-    // Vérifie si la tâche existe
+    // Verify if the task exists
     if (!task) {
         throw new errors_1.NotFoundError('Task not found');
     }

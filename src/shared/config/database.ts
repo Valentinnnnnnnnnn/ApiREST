@@ -2,7 +2,6 @@ import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 
 dotenv.config()
-// TODO : use error models
 // Check if MONGODB_URI environment variable is defined
 const mongoURI = process.env.MONGODB_URI
 if (!mongoURI) {

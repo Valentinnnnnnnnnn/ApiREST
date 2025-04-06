@@ -17,70 +17,38 @@ class MongooseRepository {
     }
     create(item) {
         return __awaiter(this, void 0, void 0, function* () {
-            try {
-                return yield this.model.create(item);
-            }
-            catch (error) {
-                throw new errors_1.ValidationError('Invalid item format');
-            }
+            return yield this.model.create(item);
         });
     }
     getById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const result = yield this.model.findById(String(id)).exec();
-                return result;
-            }
-            catch (error) {
-                throw new errors_1.ValidationError('Invalid ID format');
-            }
+            const result = yield this.model.findById(String(id)).exec();
+            return result;
         });
     }
     getAll() {
         return __awaiter(this, void 0, void 0, function* () {
-            try {
-                return yield this.model.find().exec();
-            }
-            catch (error) {
-                throw new errors_1.ValidationError('Invalid ID format');
-            }
+            return yield this.model.find().exec();
         });
     }
     update(id, item) {
         return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const result = yield this.model
-                    .findByIdAndUpdate(id, item, { new: true })
-                    .exec();
-                if (result === null) {
-                    throw new errors_1.NotFoundError('Item not found');
-                }
-                return result;
+            const result = yield this.model
+                .findByIdAndUpdate(id, item, { new: true })
+                .exec();
+            if (result === null) {
+                throw new errors_1.NotFoundError('Item not found');
             }
-            catch (error) {
-                console.error('Error updating item:', error);
-                if (error.code === 'NOT_FOUND') {
-                    throw error;
-                }
-                throw new errors_1.BadRequestError('Invalid request');
-            }
+            return result;
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const result = yield this.model.findByIdAndDelete(String(id)).exec();
-                if (!result) {
-                    throw new errors_1.NotFoundError('Item not found');
-                }
-                return true;
+            const result = yield this.model.findByIdAndDelete(String(id)).exec();
+            if (!result) {
+                throw new errors_1.NotFoundError('Item not found');
             }
-            catch (error) {
-                if (error.code === 'NOT_FOUND') {
-                    throw error;
-                }
-                throw new errors_1.ValidationError('Invalid request');
-            }
+            return true;
         });
     }
 }
