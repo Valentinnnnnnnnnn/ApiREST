@@ -63,6 +63,7 @@ class TaskService {
                 throw new errors_1.NotFoundError('Task not found');
             }
             task.completed = !task.completed;
+            task.updatedAt = new Date(); // Set the updatedAt field to the current date
             return this.taskRepository.update(id, task);
         });
     }
