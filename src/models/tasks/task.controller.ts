@@ -1,7 +1,7 @@
 import { asyncHandler } from '../../shared/utils/asyncHandler'
 import { TaskService } from './task.service'
 import { BadRequestError } from '../../shared/utils/errors'
-import { TaskFilters, Priority } from './task.model'
+import { TaskFilters, Priority, CreateTaskDto } from './task.model'
 
 export class TaskController {
   public static getAllTasks = asyncHandler(async (req, res) => {
@@ -47,8 +47,22 @@ export class TaskController {
     }
     res.status(200).json(task)
   })
-
   public static createTask = asyncHandler(async (req, res) => {
+    const createTaskDto = req.body as CreateTaskDto
+
+    // Check if title is provided and is a string
+    if (!createTaskDto.title || typeof createTaskDto.title !== 'string') {
+      throw new BadRequestError('"title" is required and must be a string')
+    }
+
+    // Check if priority is provided and is a valid enum value
+    if (
+      createTaskDto.priority &&
+      !Object.values(Priority).includes(createTaskDto.priority)
+    ) {
+      throw new BadRequestError('"Priority" is invalid')
+    }
+
     const task = await new TaskService().createTask(req.body)
     res.status(201).json(task)
   })

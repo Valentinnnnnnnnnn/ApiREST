@@ -38,7 +38,6 @@ export type UpdateTodoDto = {
 }
 
 export const taskSchema = new Schema<Task>({
-  id: { type: Number },
   title: { type: String, required: true },
   description: { type: String },
   completed: { type: Boolean, default: false },

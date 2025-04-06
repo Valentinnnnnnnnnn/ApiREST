@@ -9,7 +9,6 @@ var Priority;
     Priority["High"] = "high";
 })(Priority || (exports.Priority = Priority = {}));
 exports.taskSchema = new mongoose_1.Schema({
-    id: { type: Number },
     title: { type: String, required: true },
     description: { type: String },
     completed: { type: Boolean, default: false },

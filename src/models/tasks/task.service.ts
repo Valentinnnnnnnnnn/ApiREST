@@ -33,7 +33,6 @@ export class TaskService {
   }
 
   public async createTask(task: Task) {
-    console.log('task', task)
     return this.taskRepository.create(task)
   }
 

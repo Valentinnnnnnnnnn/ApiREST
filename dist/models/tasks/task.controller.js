@@ -49,15 +49,30 @@ TaskController.getTask = (0, asyncHandler_1.asyncHandler)((req, res) => __awaite
     // Vérifie si l'id correspond aux attentes d'un ObjectId MongoDB
     const objectIdRegex = /^[a-fA-F0-9]{24}$/;
     if (!objectIdRegex.test(id)) {
-        throw new errors_1.BadRequestError('L\'identifiant de la tâche est invalide');
+        throw new errors_1.BadRequestError("L'identifiant de la tâche est invalide");
     }
     const task = yield new task_service_1.TaskService().getTask(id);
+    // Vérifie si la tâche existe
     if (!task) {
         throw new errors_1.BadRequestError('Tâche introuvable');
     }
     res.status(200).json(task);
 }));
 TaskController.createTask = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // Check if the body is correctly formatted in JSON
+    if (!req.body || typeof req.body !== 'object') {
+        throw new errors_1.BadRequestError('Invalid JSON format');
+    }
+    const createTaskDto = req.body;
+    // Check if title is provided and is a string
+    if (!createTaskDto.title || typeof createTaskDto.title !== 'string') {
+        throw new errors_1.BadRequestError('"title" is required and must be a string');
+    }
+    // Check if priority is provided and is a valid enum value
+    if (createTaskDto.priority &&
+        !Object.values(task_model_1.Priority).includes(createTaskDto.priority)) {
+        throw new errors_1.BadRequestError('"Priority" is invalid');
+    }
     const task = yield new task_service_1.TaskService().createTask(req.body);
     res.status(201).json(task);
 }));

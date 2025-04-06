@@ -43,7 +43,6 @@ class TaskService {
     }
     createTask(task) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log('task', task);
             return this.taskRepository.create(task);
         });
     }
