@@ -1,6 +1,6 @@
 import { Model, Document } from 'mongoose'
 import { IRepository } from './generic.model'
-import { ValidationError } from '../errors/error.model'
+import { ValidationError } from '../../shared/utils/errors'
 
 export abstract class MongooseRepository<T extends Document>
   implements IRepository<T>

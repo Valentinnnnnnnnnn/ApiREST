@@ -1,6 +1,6 @@
 import { TaskRepository } from './task.repository'
 import { Task } from './task.model'
-import { ValidationError } from '../errors/error.model'
+import { ValidationError } from '../../shared/utils/errors'
 
 export class TaskService {
   private taskRepository: TaskRepository
