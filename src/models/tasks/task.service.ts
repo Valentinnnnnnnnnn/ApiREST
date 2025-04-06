@@ -1,5 +1,6 @@
 import { TaskRepository } from './task.repository'
 import { Task, TaskFilters } from './task.model'
+import { NotFoundError } from '../../shared/utils/errors'
 
 export class TaskService {
   private taskRepository: TaskRepository
@@ -45,8 +46,8 @@ export class TaskService {
 
   public async toggleTaskComplete(id: string) {
     const task = await this.taskRepository.getById(id)
-    if (!task) {
-      throw new Error('Task not found')
+    if (task === null) {
+      throw new NotFoundError('Task not found')
     }
     task.completed = !task.completed
     return this.taskRepository.update(id, task)

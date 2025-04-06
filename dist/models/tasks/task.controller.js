@@ -94,6 +94,8 @@ TaskController.deleteTask = (0, asyncHandler_1.asyncHandler)((req, res) => __awa
     res.status(200).json(task);
 }));
 TaskController.toggleTaskComplete = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const task = yield new task_service_1.TaskService().toggleTaskComplete(req.params.id);
+    const { id } = req.params;
+    _a.checkIdFormat(id);
+    const task = yield new task_service_1.TaskService().toggleTaskComplete(id);
     res.status(200).json(task);
 }));

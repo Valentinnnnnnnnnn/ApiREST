@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TaskService = void 0;
 const task_repository_1 = require("./task.repository");
+const errors_1 = require("../../shared/utils/errors");
 class TaskService {
     constructor() {
         this.taskRepository = new task_repository_1.TaskRepository();
@@ -58,8 +59,8 @@ class TaskService {
     toggleTaskComplete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const task = yield this.taskRepository.getById(id);
-            if (!task) {
-                throw new Error('Task not found');
+            if (task === null) {
+                throw new errors_1.NotFoundError('Task not found');
             }
             task.completed = !task.completed;
             return this.taskRepository.update(id, task);

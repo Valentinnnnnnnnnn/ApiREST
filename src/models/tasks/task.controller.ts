@@ -102,7 +102,9 @@ export class TaskController {
   })
 
   public static toggleTaskComplete = asyncHandler(async (req, res) => {
-    const task = await new TaskService().toggleTaskComplete(req.params.id)
+    const { id } = req.params
+    this.checkIdFormat(id)
+    const task = await new TaskService().toggleTaskComplete(id)
     res.status(200).json(task)
   })
 }
