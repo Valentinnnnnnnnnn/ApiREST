@@ -11,12 +11,11 @@ const errorHandlerMiddleware = (err, req, res, next) => {
         });
     }
     else
-        (
         // Manage unexpected errors
         res.status(500).json({
             status: 'error',
             message: 'An unexpected error occurred, please try again later or contact your system administrator'
-        }));
+        });
     next(); // For potental future logging
 };
 exports.errorHandlerMiddleware = errorHandlerMiddleware;

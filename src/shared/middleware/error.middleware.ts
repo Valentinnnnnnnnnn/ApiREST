@@ -13,14 +13,13 @@ export const errorHandlerMiddleware = (
       code: err.code,
       message: err.message
     })
-  } else (
+  } else
     // Manage unexpected errors
-  res.status(500).json({
-    status: 'error',
-    message:
-      'An unexpected error occurred, please try again later or contact your system administrator'
-  })
-  )
+    res.status(500).json({
+      status: 'error',
+      message:
+        'An unexpected error occurred, please try again later or contact your system administrator'
+    })
 
   next() // For potental future logging
 }

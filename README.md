@@ -46,3 +46,6 @@ Before starting, ensure that you have Node.js and npm installed on your machine.
 
 - **pnpm prettier-check**  
   Checks if the codebase conforms to Prettier formatting rules without modifying any files.
+
+- **pnpm docs**  
+  Generates documentation using Swagger and serves it on `http://localhost:PORT/docs`.
